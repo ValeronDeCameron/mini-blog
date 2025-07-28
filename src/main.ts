@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { log } from 'node:console';
 
 
 let PORT = 3000

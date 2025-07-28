@@ -17,6 +17,44 @@ export class UserService {
             password: "mmnzx"
         }
     ]
+    private nums = [1,2,3,4,5,6,7,8,9]
+    private converts = {
+        "а": "a",
+        "б": "b",
+        "в": "v",
+        "г": "h",
+        "ґ": "g",
+        "д": "d",
+        "е": "e",
+        "є": "ye",
+        "ж": "zh",
+        "з": "z",
+        "и": "y",
+        "і": "i",
+        "ї": "yi",
+        "й": "y",
+        "к": "k",
+        "л": "l",
+        "м": "m",
+        "н": "n",
+        "о": "o",
+        "п": "p",
+        "р": "r",
+        "с": "s",
+        "т": "t",
+        "у": "u",
+        "ф": "f",
+        "х": "kh",
+        "ц": "ts",
+        "ч": "ch",
+        "ш": "sh",
+        "щ": "shch",
+        "ь": "",
+        "ю": "yu",
+        "я": "ya",
+        "’": "",
+        "'": ""
+    }
     
     findAll() {
         return this.data;
@@ -30,13 +68,23 @@ export class UserService {
 
     createNewUser(dto: createUserDto) {
 
-        const {name, password, email} = dto;
+        const {firstName, lastName, password, email} = dto;
+        let isBanned = false;
+        let isVerified = email ? true : false;
+        let nickname = lastName?.split("").map(el =>  this.converts[el.toLowerCase()]).join("")
+        for (let i = 0; i<4; i++) {
+            nickname += String(this.nums[Math.floor(Math.random()*this.nums.length)])
+        }
+        const name = `${firstName} ${lastName ?? ""}`.trim();
         let id = this.data.length + Date.now()
         let newUser = {
             id: id,
             name,
             password,
-            email
+            email,
+            nickname,
+            isBanned,
+            isVerified
         }
 
         this.data.push(newUser);
@@ -44,7 +92,6 @@ export class UserService {
     }
 
     updateUser(id, dto: updateUserDto) {
-        const {name, password, email} = dto;
         let oldUserIndex = this.data.findIndex( user => id === user.id);
         if (oldUserIndex === -1) throw new NotFoundException("Smth going wrong with update");
         let oldUser = this.data[oldUserIndex]

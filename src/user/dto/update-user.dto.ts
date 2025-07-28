@@ -1,5 +1,6 @@
 export class updateUserDto {
-    name?: string;
+    firstName?: string;
+    lastName?: string;
     password?: string;
     email?: string;
 }
